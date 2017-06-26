@@ -4,7 +4,7 @@ description: >
   This is a nested Heat used by the 3-Tier Architecture Workload reference document
   created by the Enterprise Working Group.  These templates demonstrate a sample
   LAMP architecture supporting Wordpress. This template file creates 3 separate
-  private networks, two load balancers(LBaaS V1), and creates 3 security groups.
+  private networks, two load balancers(LBaaS V2), and creates 3 security groups.
   This serves as a guide to new users and is not meant for production deployment.
 
   REQUIRED PARAMETERS:
@@ -134,83 +134,84 @@ resources:
 #Create two Load Balancers one for the Web tier with a public IP and one for the App Tier
 #with only private network access
 
-#LBaaS V1 Load Balancer for Web Tier
+#LBaaS V2 Load Balancer for Web Tier
   Web_Tier_LoadBalancer:
-    type: OS::Neutron::LoadBalancer
+    type: OS::Neutron::LBaas::LoadBalancer
     properties:
-      protocol_port: 80
-      pool_id: {get_resource: Web_Server_Pool}
+      vip_subnet: { get_resource: web_private_network_subnet }
+      name: "WebLoadBalancer"
 
-#LBaaS V1 Monitor for Web Tier
+#LBaas V2 Listener
+  Web_Tier_Listener:
+    type: OS::Neutron::LBaas::Listener
+    properties:
+      protocol: HTTP
+      protocol_port: 80
+      loadbalancer: { get_resource: Web_Tier_LoadBalancer }
+
+#LBaaS V2 Pool for Web Tier
+  Web_Server_Pool:
+    type: OS::Neutron::LBaas::Pool
+    properties:
+      protocol: HTTP
+      lb_algorithm: ROUND_ROBIN
+      listener: { get_resource: Web_Tier_Listener }
+
+#LBaaS V2 Monitor for Web Tier
   Web_Tier_Monitor:
-    type: OS::Neutron::HealthMonitor
+    type: OS::Neutron::LBaaS::HealthMonitor
     properties:
       type: TCP
       delay: 5
       max_retries: 5
       timeout: 5
-
-#LBaaS V1 Pool for Web Tier
-  Web_Server_Pool:
-    type: OS::Neutron::Pool
-    properties:
-      protocol: HTTP
-      monitors: [{get_resource: Web_Tier_Monitor}]
-      subnet: {get_resource: web_private_network_subnet}
-      lb_method: ROUND_ROBIN
-      vip:
-        protocol_port: 80
-
-# Create a VIP port
-  web_vip_port:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_resource: web_private_network }
-      security_groups: [{ get_resource: web_security_group }]
-      fixed_ips:
-        - subnet_id:  { get_resource: web_private_network_subnet }
+      pool: { get_resource: Web_Server_Pool }
 
 #  Floating_IP:
   Web_Network_Floating_IP:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: {get_param: public_network_id}
-      port_id: { get_resource: web_vip_port }
 
 #  Associate the Floating IP:
   association:
     type: OS::Neutron::FloatingIPAssociation
     properties:
       floatingip_id: { get_resource: Web_Network_Floating_IP }
-      port_id: { get_attr: [ Web_Server_Pool, vip, port_id ] }
+      port_id: { get_attr: [ Web_Tier_LoadBalancer, vip_port_id ] }
 
 #****************************************
 #App Load Balancer
   App_Tier_LoadBalancer:
-    type: OS::Neutron::LoadBalancer
+    type: OS::Neutron::LBaas::LoadBalancer
     properties:
-      protocol_port: 80
-      pool_id: {get_resource: App_Server_Pool}
+      vip_subnet: { get_resource: App_private_network_subnet }
+      name: "AppLoadBalancer"
 
-#LBaaS V1 Monitor for App Tier
+  App_Tier_Listener:
+    type: OS::Neutron::LBaas::Listener
+    properties:
+      protocol: HTTP
+      protocol_port: 80
+      loadbalancer: { get_resource: App_Tier_LoadBalancer }
+
+#LBaaS V2 Pool for App Tier
+  App_Server_Pool:
+    type: OS::Neutron::LBaas::Pool
+    properties:
+      protocol: HTTP
+      lb_algorithm: ROUND_ROBIN
+      listener: { get_resource: App_Tier_Listener }
+
+#LBaaS V2 Monitor for App Tier
   App_Tier_Monitor:
-    type: OS::Neutron::HealthMonitor
+    type: OS::Neutron::LBaaS::HealthMonitor
     properties:
       type: TCP
       delay: 5
       max_retries: 5
       timeout: 5
-
-#LBaaS V1 Pool for App Tier
-  App_Server_Pool:
-    type: OS::Neutron::Pool
-    properties:
-      protocol: HTTP
-      monitors: [{get_resource: App_Tier_Monitor}]
-      subnet_id: {get_resource: App_private_network_subnet}
-      lb_method: ROUND_ROBIN
-      vip:
-        protocol_port: 80
+      pool: { get_resource: App_Server_Pool }
 
 #############################
 # create a private network/subnet for the Database servers

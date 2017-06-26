@@ -123,11 +123,12 @@ resources:
             fi
 
   Pool_Member:
-      type: OS::Neutron::PoolMember
+      type: OS::Neutron::LBaas::PoolMember
       properties:
-        pool_id: {get_param: pool_name}
         address: {get_attr: [web_server, first_address]}
+        pool: {get_param: pool_name}
         protocol_port: 80
+        subnet: {get_param: private_network_id}
 
 outputs:
   web_private_ip:

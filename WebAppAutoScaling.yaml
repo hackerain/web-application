@@ -185,7 +185,7 @@ resources:
       scaling_adjustment: 1
 
   app_cpu_alarm_high:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg
@@ -213,7 +213,7 @@ resources:
       scaling_adjustment: -1
 
   app_cpu_alarm_low:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg
@@ -267,7 +267,7 @@ resources:
       scaling_adjustment: 1
 
   web_cpu_alarm_high:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg
@@ -289,7 +289,7 @@ resources:
       scaling_adjustment: -1
 
   web_cpu_alarm_low:
-    type: OS::Ceilometer::Alarm
+    type: OS::Aodh::Alarm
     properties:
       meter_name: cpu_util
       statistic: avg

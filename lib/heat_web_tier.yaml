@@ -44,6 +44,11 @@ parameters:
     default: Web_Tier_private_network
     description: The private Web network that will be utilized for all web servers
 
+  private_subnet_id:
+    type: string
+    default: Web_Tier_private_subnet
+    description: The private subnet that LoadBalancer members will live in
+
   security_group:
     type: string
     default: Workload_Web_SG
@@ -128,7 +133,7 @@ resources:
         address: {get_attr: [web_server, first_address]}
         pool: {get_param: pool_name}
         protocol_port: 80
-        subnet: {get_param: private_network_id}
+        subnet: {get_param: private_subnet_id}
 
 outputs:
   web_private_ip:

@@ -321,12 +321,21 @@ outputs:
   db_private_network_id:
     description: Database private network ID
     value: {get_resource: DB_private_network}
+  db_private_subnet_id:
+    description: Database private subnet ID
+    value: {get_resource: DB_private_network_subnet}
   web_private_network_id:
     description: Web private network ID
     value: {get_resource: web_private_network}
+  web_private_subnet_id:
+    description: Web private subnet ID
+    value: {get_resource: web_private_network_subnet}
   app_private_network_id:
     description: App private network ID
     value: {get_resource: App_private_network}
+  app_private_subnet_id:
+    description: App private subnet ID
+    value: {get_resource: App_private_network_subnet}
   db_security_group_id:
     description: Database security group ID
     value: {get_resource: db_security_group}

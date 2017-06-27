@@ -44,6 +44,11 @@ parameters:
     default: App_Tier_private_network
     description: The private Application network that will be utilized for all App servers
 
+  private_subnet_id:
+    type: string
+    default: App_Tier_private_subnet
+    description: The private Application subnet that LoadBalancer members will live in
+
   security_group:
     type: string
     default: Workload_App_SG
@@ -127,7 +132,7 @@ resources:
         address: {get_attr: [app_server, first_address]}
         pool: {get_param: pool_name}
         protocol_port: 80
-        subnet: {get_param: private_network_id}
+        subnet: {get_param: private_subnet_id}
 
 outputs:
   app_private_ip:

@@ -165,6 +165,7 @@ resources:
          image_id:
            get_param: image_id
          private_network_id: {get_attr: [network_setup, app_private_network_id]}
+         private_subnet_id: {get_attr: [network_setup, app_private_subnet_id]}
          security_group: {get_attr: [network_setup, app_security_group_id]}
          pool_name: {get_attr: [network_setup, app_lbaas_pool_name]}
          db_server_ip: {get_attr: [launch_db_server, instance_ip]}
@@ -192,6 +193,7 @@ resources:
          image_id:
            get_param: image_id
          private_network_id: {get_attr: [network_setup, web_private_network_id]}
+         private_subnet_id: {get_attr: [network_setup, web_private_subnet_id]}
          app_lbaas_vip: {get_attr: [network_setup, app_lbaas_IP]}
          security_group: {get_attr: [network_setup, web_security_group_id]}
          pool_name: {get_attr: [network_setup, web_lbaas_pool_name]}

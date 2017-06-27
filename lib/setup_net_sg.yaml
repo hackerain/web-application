@@ -346,4 +346,4 @@ outputs:
     value: { get_attr: [ Web_Network_Floating_IP, floating_ip_address ] }
   app_lbaas_IP:
     description: Internal floating IP assigned to app LBaaS
-    value: {get_attr: [ App_Server_Pool, vip, address]}
+    value: {get_attr: [ App_Tier_LoadBalancer, vip_address ] }

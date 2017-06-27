@@ -136,14 +136,14 @@ resources:
 
 #LBaaS V2 Load Balancer for Web Tier
   Web_Tier_LoadBalancer:
-    type: OS::Neutron::LBaas::LoadBalancer
+    type: OS::Neutron::LBaaS::LoadBalancer
     properties:
       vip_subnet: { get_resource: web_private_network_subnet }
       name: "WebLoadBalancer"
 
-#LBaas V2 Listener
+#LBaaS V2 Listener
   Web_Tier_Listener:
-    type: OS::Neutron::LBaas::Listener
+    type: OS::Neutron::LBaaS::Listener
     properties:
       protocol: HTTP
       protocol_port: 80
@@ -151,7 +151,7 @@ resources:
 
 #LBaaS V2 Pool for Web Tier
   Web_Server_Pool:
-    type: OS::Neutron::LBaas::Pool
+    type: OS::Neutron::LBaaS::Pool
     properties:
       protocol: HTTP
       lb_algorithm: ROUND_ROBIN
@@ -183,13 +183,13 @@ resources:
 #****************************************
 #App Load Balancer
   App_Tier_LoadBalancer:
-    type: OS::Neutron::LBaas::LoadBalancer
+    type: OS::Neutron::LBaaS::LoadBalancer
     properties:
       vip_subnet: { get_resource: App_private_network_subnet }
       name: "AppLoadBalancer"
 
   App_Tier_Listener:
-    type: OS::Neutron::LBaas::Listener
+    type: OS::Neutron::LBaaS::Listener
     properties:
       protocol: HTTP
       protocol_port: 80
@@ -197,7 +197,7 @@ resources:
 
 #LBaaS V2 Pool for App Tier
   App_Server_Pool:
-    type: OS::Neutron::LBaas::Pool
+    type: OS::Neutron::LBaaS::Pool
     properties:
       protocol: HTTP
       lb_algorithm: ROUND_ROBIN

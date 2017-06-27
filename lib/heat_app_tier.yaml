@@ -122,7 +122,7 @@ resources:
             systemctl restart httpd.service
 
   Pool_Member:
-      type: OS::Neutron::LBaas::PoolMember
+      type: OS::Neutron::LBaaS::PoolMember
       properties:
         address: {get_attr: [app_server, first_address]}
         pool: {get_param: pool_name}

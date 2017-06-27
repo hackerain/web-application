@@ -123,7 +123,7 @@ resources:
             fi
 
   Pool_Member:
-      type: OS::Neutron::LBaas::PoolMember
+      type: OS::Neutron::LBaaS::PoolMember
       properties:
         address: {get_attr: [web_server, first_address]}
         pool: {get_param: pool_name}

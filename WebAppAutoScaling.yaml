@@ -185,21 +185,20 @@ resources:
       scaling_adjustment: 1
 
   app_cpu_alarm_high:
-    type: OS::Aodh::Alarm
+    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
     properties:
-      meter_name: cpu_util
-      statistic: avg
-      #period needs to be greater than the sampling rate in the pipleine.config file in /etc/ceilometer
-      period: 600
-      evaluation_periods: 1
+      metric: cpu_util
+      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
+      query: '{"=": {"autoscale_group_name": "app_autoscale_group"}}'
+      resource_type: instance
       #Alarms if CPU utilization for ALL app nodes averaged together exceeds 50%
       threshold: 50
+      aggregation_method: mean
+      evaluation_periods: 1
+      granularity: 300
       repeat_actions: true
       alarm_actions:
         - {get_attr: [app_scaleup_policy, alarm_url]}
-      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
-      #Otherwise ceilometer would look at all servers in the project
-      matching_metadata: {'metadata.user_metadata.autoscale_group_name': "app_autoscale_group"}
       comparison_operator: gt
 
   app_scaledown_policy:
@@ -213,21 +212,20 @@ resources:
       scaling_adjustment: -1
 
   app_cpu_alarm_low:
-    type: OS::Aodh::Alarm
+    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
     properties:
       meter_name: cpu_util
-      statistic: avg
-      #period needs to be greater than the sampling rate in the pipleine.config file in /etc/ceilometer
-      period: 600
+      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
+      query: '{"=": {"autoscale_group_name": "app_autoscale_group"}}'
+      aggregation_method: mean
+      resource_type: instance
       evaluation_periods: 1
+      granularity: 300
       #Alarms if CPU utilization for ALL app nodes averaged together drops below 20%
       threshold: 20
       repeat_actions: true
       alarm_actions:
         - {get_attr: [app_scaledown_policy, alarm_url]}
-      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
-      #Otherwise ceilometer would look at all servers in the project
-      matching_metadata: {'metadata.user_metadata.autoscale_group_name': "app_autoscale_group"}
       comparison_operator: lt
 
 ####################
@@ -267,17 +265,19 @@ resources:
       scaling_adjustment: 1
 
   web_cpu_alarm_high:
-    type: OS::Aodh::Alarm
+    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
     properties:
-      meter_name: cpu_util
-      statistic: avg
-      period: 600
+      metric: cpu_util
+      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
+      query: '{"=": {"autoscale_group_name": "web_autoscale_group"}}'
+      aggregation_method: mean
+      resource_type: instance
+      granularity: 300
       evaluation_periods: 1
       threshold: 50
       repeat_actions: true
       alarm_actions:
         - {get_attr: [web_scaleup_policy, alarm_url]}
-      matching_metadata: {'metadata.user_metadata.autoscale_group_name': "web_autoscale_group"}
       comparison_operator: gt
 
   web_scaledown_policy:
@@ -289,17 +289,19 @@ resources:
       scaling_adjustment: -1
 
   web_cpu_alarm_low:
-    type: OS::Aodh::Alarm
+    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
     properties:
-      meter_name: cpu_util
-      statistic: avg
-      period: 600
+      metric: cpu_util
+      #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
+      query: '{"=": {"autoscale_group_name": "app_autoscale_group"}}'
+      resource_type: instance
+      aggregation_method: mean
+      granularity: 300
       evaluation_periods: 1
       threshold: 20
       repeat_actions: true
       alarm_actions:
         - {get_attr: [web_scaledown_policy, alarm_url]}
-      matching_metadata: {'metadata.user_metadata.autoscale_group_name': "web_autoscale_group"}
       comparison_operator: lt
 
 ######################################

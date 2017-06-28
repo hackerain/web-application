@@ -1,4 +1,4 @@
-heat_template_version: 2016-04-08
+heat_template_version: 2015-10-15
 #The value of heat_template_version tells Heat not only the format of the template but also features that will be validated and supported
 #2016-04-08 represents the Mitaka release
 

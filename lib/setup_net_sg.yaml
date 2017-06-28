@@ -98,7 +98,7 @@ resources:
     type: OS::Neutron::Router
     properties:
       name: "AppWebRouter"
-      #external_gateway_info: {"network":  { get_param: public_network_id }, "enable_snat": True}
+      external_gateway_info: {"network":  { get_param: public_network_id }, "enable_snat": True}
 
 # Create a port connecting the App_router to the App network
   web_router_app_port:
@@ -237,7 +237,7 @@ resources:
     type: OS::Neutron::Router
     properties:
       name: "AppDBRouter"
-      #external_gateway_info: {"network":  { get_param: public_network_id }, "enable_snat": True}
+      external_gateway_info: {"network":  { get_param: public_network_id }, "enable_snat": True}
 
 # Create a port connecting the db_router to the db network
   db_router_db_port:

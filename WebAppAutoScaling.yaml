@@ -185,7 +185,7 @@ resources:
       scaling_adjustment: 1
 
   app_cpu_alarm_high:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
     properties:
       metric: cpu_util
       #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
@@ -212,9 +212,9 @@ resources:
       scaling_adjustment: -1
 
   app_cpu_alarm_low:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
     properties:
-      meter_name: cpu_util
+      metric: cpu_util
       #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
       query: '{"=": {"autoscale_group_name": "app_autoscale_group"}}'
       aggregation_method: mean
@@ -265,7 +265,7 @@ resources:
       scaling_adjustment: 1
 
   web_cpu_alarm_high:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
     properties:
       metric: cpu_util
       #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group
@@ -289,7 +289,7 @@ resources:
       scaling_adjustment: -1
 
   web_cpu_alarm_low:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiAggregationByResourcesAlarm
     properties:
       metric: cpu_util
       #Collect data only on servers with the autoscale_group_name metadata set to app_autoscale_group

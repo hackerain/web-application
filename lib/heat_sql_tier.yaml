@@ -155,7 +155,7 @@ resources:
              service mysql start
             elif which yum &> /dev/null
             then
-             yum update -y
+             #yum update -y
              setenforce 0
              yum -y install mariadb-server mariadb
              systemctl start mariadb

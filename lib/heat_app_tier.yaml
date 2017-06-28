@@ -94,7 +94,7 @@ resources:
              apt-get -y install apache2 php5 libapache2-mod-php5 php5-mysql php5-gd mysql-client
             elif which yum &> /dev/null
             then
-             yum update -y
+             #yum update -y
              #Install PHP5, and mysql
              setenforce 0
              yum install -y php php-mysql

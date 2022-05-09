@@ -1,7 +1,7 @@
 parameter_defaults:
   ssh_key_name: guangyu
-  image_id: ce81e890-f159-4c48-a2fd-986dde3e3619
-  public_network_id: f9286ec9-0142-4a0e-9b2d-bc52488112c4
-  db_instance_flavor: micro-2
-  app_instance_flavor: micro-2
-  web_instance_flavor: micro-2
+  image_id: 7444e5c4-101e-4186-8aa1-4be014efdaa5
+  public_network_id: 88fc245c-1024-4e6e-87d1-161d5ebbb7c3
+  db_instance_flavor: c5.xlarge
+  app_instance_flavor: c5.xlarge
+  web_instance_flavor: c5.xlarge

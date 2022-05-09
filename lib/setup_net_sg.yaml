@@ -87,7 +87,7 @@ resources:
       allocation_pools: [{ "start": 192.168.101.10, "end": 192.168.101.200 }]
       #This routing information will get passed to the instances as they startup
       #Provide both the routes to the DB nework and to the web network
-      host_routes: [{"destination": 192.168.100.0/24, "nexthop": 192.168.101.5}, {"destination": 192.168.102.0/24, "nexthop": 192.168.101.6}, {"destination": 0.0.0.0/24, "nexthop": 192.168.100.4}]
+      host_routes: [{"destination": 192.168.102.0/24, "nexthop": 192.168.101.6}]
       network: { get_resource: App_private_network }
       name: App_Tier_private_subnet
       dns_nameservers: { get_param: dns_nameserver }
@@ -136,14 +136,14 @@ resources:
 
 #LBaaS V2 Load Balancer for Web Tier
   Web_Tier_LoadBalancer:
-    type: OS::Neutron::LBaaS::LoadBalancer
+    type: OS::Octavia::LoadBalancer
     properties:
       vip_subnet: { get_resource: web_private_network_subnet }
       name: "WebLoadBalancer"
 
 #LBaaS V2 Listener
   Web_Tier_Listener:
-    type: OS::Neutron::LBaaS::Listener
+    type: OS::Octavia::Listener
     properties:
       protocol: HTTP
       protocol_port: 80
@@ -151,7 +151,7 @@ resources:
 
 #LBaaS V2 Pool for Web Tier
   Web_Server_Pool:
-    type: OS::Neutron::LBaaS::Pool
+    type: OS::Octavia::Pool
     properties:
       protocol: HTTP
       lb_algorithm: ROUND_ROBIN
@@ -159,7 +159,7 @@ resources:
 
 #LBaaS V2 Monitor for Web Tier
   Web_Tier_Monitor:
-    type: OS::Neutron::LBaaS::HealthMonitor
+    type: OS::Octavia::HealthMonitor
     properties:
       type: TCP
       delay: 5
@@ -184,13 +184,13 @@ resources:
 #****************************************
 #App Load Balancer
   App_Tier_LoadBalancer:
-    type: OS::Neutron::LBaaS::LoadBalancer
+    type: OS::Octavia::LoadBalancer
     properties:
       vip_subnet: { get_resource: App_private_network_subnet }
       name: "AppLoadBalancer"
 
   App_Tier_Listener:
-    type: OS::Neutron::LBaaS::Listener
+    type: OS::Octavia::Listener
     properties:
       protocol: HTTP
       protocol_port: 80
@@ -198,7 +198,7 @@ resources:
 
 #LBaaS V2 Pool for App Tier
   App_Server_Pool:
-    type: OS::Neutron::LBaaS::Pool
+    type: OS::Octavia::Pool
     properties:
       protocol: HTTP
       lb_algorithm: ROUND_ROBIN
@@ -206,7 +206,7 @@ resources:
 
 #LBaaS V2 Monitor for App Tier
   App_Tier_Monitor:
-    type: OS::Neutron::LBaaS::HealthMonitor
+    type: OS::Octavia::HealthMonitor
     properties:
       type: TCP
       delay: 5
@@ -227,7 +227,7 @@ resources:
       cidr: 192.168.102.0/24
       gateway_ip: 192.168.102.6
       allocation_pools: [{ "start": 192.168.102.10, "end": 192.168.102.200 }]
-      host_routes: [{"destination": 192.168.101.0/24, "nexthop": 192.168.102.6}]
+      #host_routes: [{"destination": 192.168.101.0/24, "nexthop": 192.168.102.6}]
       network: { get_resource: DB_private_network }
       name: DB_Tier_private_subnet
       dns_nameservers: { get_param: dns_nameserver }
